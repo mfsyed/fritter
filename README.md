@@ -313,3 +313,141 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+
+## API Routes for Milestone
+
+#### `POST /api/react/reaction?=` - React to a Freet
+
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+
+
+
+#### `POST /api/reports/:freetId?` - Report a Freet
+
+**Body**
+
+- `content` _{string}_ - The content of the freet
+
+**Returns**
+
+- A success message
+- A object with the created report
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the report content is empty or a stream of empty spaces
+
+
+
+#### `POST /api/viewonly/:vieweeID` - Switch viewonlymodestate state
+
+
+**Returns**
+
+- A success message
+
+
+**Throws**
+
+- `403` if the user is not logged in
+
+
+
+
+
+#### `POST /api/ItemsForSale` - Create a new ItemForSale
+
+**Body**
+
+- `description` _{string}_ - The content of the item
+
+- `price` _{string}_ - The price of the item
+
+- `link` _{string}_ - The website link to the item
+
+- `name` _{string}_ - name of the item
+
+**Returns**
+
+- A success message
+- A object with the created ItemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If any of the fields are empty
+- `413` If the description is more than 140 characters
+
+
+
+#### `DELETE /api/itemsForSale/:itemForSaleId?` - Delete an existing ItemforSale
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the author of the freet
+- `404` if the itemForSaleId is invalid
+
+#### `PUT /api/itemsForSale/:itemForSaleId?` - Update an existing itemForSale
+
+**Body**
+
+- `description` _{string}_ - The content of the item
+
+- `price` _{string}_ - The price of the item
+
+- `link` _{string}_ - The website link to the item
+
+- `name` _{string}_ - name of the item
+
+**Returns**
+
+- A success message
+- An object with the updated itemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the itemForSaleId is invalid
+- `403` if the user is not the author of the itemForSale
+- `400` if the new itemForSale content is empty or a stream of empty spaces
+- `413` if the new itemForSale description is more than 140 characters long
+
+
+
+#### `POST /api/shoppingCart/:itemForSaleId?` - Add an ItemForSale to ShoppingCart
+
+**Body**
+
+- `itemForSaleId` _{string}_ - itemForSale
+
+
+**Returns**
+
+- A success message
+- Populated shopping cart with ItemForSale
+
+**Throws**
+
+- `403` if itemForSaleId is invalid
+
+
+
+#### `GET /api/shoppingCart` - Get shopping cart items
+
+**Returns**
+
+- An array of itemForSale items in shopping cart
