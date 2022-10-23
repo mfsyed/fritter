@@ -1,9 +1,12 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {Request, Response, NextFunction} from 'express';
 import express from 'express';
-import ReactCollection from './collection';
+import FreetCollection from '../freet/collection';
+import UserCollection from '../user/collection';
+import ItemForSaleCollection from 'ItemForSale/collection';
+import ShoppingCartCollection from './collection';
 import * as userValidator from '../user/middleware';
-import * as reactValidator from '../react/middleware';
-import * as freetValidator from '../freet/middleware';
+import * as shoppingCartValidator from '../shoppingCart/middleware';
+import * as itemForSaleValidator from '../ItemForSale/middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -28,23 +31,24 @@ const router = express.Router();
 //  */
 // router.get(
 //   '/',
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     // Check if authorId query parameter was supplied
-//     if (req.query.author !== undefined) {
-//       next();
-//       return;
-//     }
+//   // async (req: Request, res: Response, next: NextFunction) => {
+//   //   // Check if authorId query parameter was supplied
+//   //   if (req.query.author !== undefined) {
+//   //     next();
+//   //     return;
+//   //   }
 
-//     const allFreets = await FreetCollection.findAll();
-//     const response = allFreets.map(util.constructFreetResponse);
-//     res.status(200).json(response);
-//   },
+//   //   const allFreets = await FreetCollection.findAll();
+//   //   const response = allFreets.map(util.constructShoppingCartResponse);
+//   //   res.status(200).json(response);
+//   // },
 //   [
 //     userValidator.isAuthorExists
 //   ],
 //   async (req: Request, res: Response) => {
-//     const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string);
-//     const response = authorFreets.map(util.constructFreetResponse);
+//     const userId = (req.session.userId as string) ?? '';
+//     const userCart = await ShoppingCartCollection.findCartByUsername(userId);
+//     const response = util.constructShoppingCartResponse(userCart);
 //     res.status(200).json(response);
 //   }
 // );
@@ -61,28 +65,24 @@ const router = express.Router();
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.post(
-    '/:freetId?',
-    ///:reaction?
+    '/',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExists,
-    reactValidator.isValidReaction,
-    freetValidator.isValidFreetModifier
+    //freetValidator.isValidFreetContent
   ],
   async (req: Request, res: Response) => {
-    const reactorId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    //const freetId = (req.session.freetId as string) ?? '';
-    const react = await ReactCollection.addOne(reactorId, req.params.freetId, req.body.reaction);
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const cart = await ShoppingCartCollection.addOne(userId);
 
     res.status(201).json({
-      message: 'Your reaction was recorded successfully.',
-      react: util.constructReactResponse(react)
+      message: 'Your cart was created successfully.',
+      freet: util.constructShoppingCartResponse(cart)
     });
   }
 );
 
 /**
- * Delete a freet
+ * Delete cart
  *
  * @name DELETE /api/freets/:id
  *
@@ -92,22 +92,23 @@ router.post(
  * @throws {404} - If the freetId is not valid
  */
 router.delete(
-  '/:reactId?',
+  '/:shoppingCartId?',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExists,
+    shoppingCartValidator.doesShoppingCartExist
+    //freetValidator.isFreetExists,
     //freetValidator.isValidFreetModifier
   ],
   async (req: Request, res: Response) => {
-    await ReactCollection.deleteOne(req.params.reactId);
+    await ShoppingCartCollection.deleteShoppingCart(req.params.shoppingCartId);
     res.status(200).json({
-      message: 'Your react was deleted successfully.'
+      message: 'Your freet was deleted successfully.'
     });
   }
 );
 
 /**
- * Modify a freet
+ * add to cart
  *
  * @name PUT /api/freets/:id
  *
@@ -120,20 +121,22 @@ router.delete(
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.put(
-  '/:reactId?',
+  '/:itemId?',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExists,
-    //freetValidator.isValidFreetModifier,
-    // freetValidator.isValidFreetContent
+    shoppingCartValidator.isValidaCartModifier,
+    shoppingCartValidator.doesShoppingCartExist,
+    itemForSaleValidator.isItemForSaleExists
   ],
   async (req: Request, res: Response) => {
-    const react = await ReactCollection.updateOne(req.params.reactId, req.body.reaction);
+    const userId = (req.session.userId as string) ?? '';
+    const cart = await ShoppingCartCollection.findCartByUsername(userId);
+    const freet = await ShoppingCartCollection.addToCart(userId, req.params.itemId);
     res.status(200).json({
-      message: 'Your reacts was changed successfully.',
-      freet: util.constructReactResponse(react)
+      message: 'Your freet was updated successfully.',
+      freet: util.constructShoppingCartResponse(freet)
     });
   }
 );
 
-export {router as reactRouter};
+export {router as freetRouter};

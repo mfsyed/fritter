@@ -12,15 +12,17 @@ import type {ItemForSale} from '../ItemForSale/model';
 export type ShoppingCart = {
     _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
     cartOwner: Types.ObjectId;
-    numberOfItems: Number;
-    items: Types.ObjectId;
-    total: string;
+    seller: Types.ObjectId;
+    numberOfItems: number;
+    items: Map<string, number>;
+    total: number;
 
 };
-
+//add populated shopping cart
 export type PopulatedShoppingCart = {
     _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
     cartOwner: User;
+    seller: User;
     numberOfItems: Number;
     items: Set<ItemForSale>;
     total: string;
@@ -39,19 +41,27 @@ const ShoppingCartSchema = new Schema<ShoppingCart>({
   },
   // The content of the freet
 
+  seller: {
+    // Use Types.ObjectId outside of the schema
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+
   numberOfItems: {
     type: Number,
     required: true
   },
 
   items: {
-    type: Schema.Types.ObjectId,
-    required: true
+    type: Map,
+    required: false,
+    ref: "ItemForSale"
   },
 
 
   total: {
-    type: String,
+    type: Number,
     required: true
   }
 

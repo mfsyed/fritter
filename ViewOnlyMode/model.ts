@@ -9,9 +9,9 @@ import {Schema, model} from 'mongoose';
 // Type definition for User on the backend
 export type ViewOnlyMode = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
-  viewerID: string;
-  vieweeID: string;
-  ViewOnlyModeState: boolean;
+  viewer: Types.ObjectId;
+  viewee: Types.ObjectId;
+  viewOnlyModeState: boolean;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -19,17 +19,17 @@ export type ViewOnlyMode = {
 // type given by the type property, inside MongoDB
 const ViewOnlyModeSchema = new Schema({
   // The user's username
-  viewerID: {
-    type: String,
+  viewer: {
+    type: Schema.Types.ObjectId,
     required: true
   },
   // The user's password
-  vieweeID: {
-    type: String,
+  viewee: {
+    type: Schema.Types.ObjectId,
     required: true
   },
   // The date the user joined
-  ViewOnlyModeState: {
+  viewOnlyModeState: {
     type: Boolean,
     required: true
   }

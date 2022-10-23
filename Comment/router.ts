@@ -1,0 +1,120 @@
+import type {NextFunction, Request, Response} from 'express';
+import express from 'express';
+import CommentCollection from './collection';
+import * as userValidator from '../user/middleware';
+import * as freetValidator from '../freet/middleware';
+import * as commentValidator from './middleware';
+import * as util from './util';
+
+const router = express.Router();
+
+/**
+ * Get all the freets
+ *
+ * @name GET /api/freets
+ *
+ * @return {FreetResponse[]} - A list of all the freets sorted in descending
+ *                      order by date modified
+ */
+/**
+ * Get freets by author.
+ *
+ * @name GET /api/freets?authorId=id
+ *
+ * @return {FreetResponse[]} - An array of freets created by user with id, authorId
+ * @throws {400} - If authorId is not given
+ * @throws {404} - If no user has given authorId
+ *
+ */
+router.get(
+  '/',
+  async (req: Request, res: Response) => {
+    const freetComments = await CommentCollection.findAllByFreet(req.query.freet as string);
+    const response = freetComments.map(util.constructCommentResponse);
+    res.status(200).json(response);
+  }
+);
+
+/**
+ * Create a new freet.
+ *
+ * @name POST /api/freets
+ *
+ * @param {string} content - The content of the freet
+ * @return {FreetResponse} - The created freet
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - If the freet content is empty or a stream of empty spaces
+ * @throws {413} - If the freet content is more than 140 characters long
+ */
+router.post(
+  '/:originalFreetId?',
+  [
+    userValidator.isUserLoggedIn,
+    freetValidator.isValidFreetContent
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const comment = await CommentCollection.addOne(userId, req.params.originalFreetId, req.body.content);
+
+    res.status(201).json({
+      message: 'Your comment was created successfully.',
+      freet: util.constructCommentResponse(comment)
+    });
+  }
+);
+
+/**
+ * Delete a freet
+ *
+ * @name DELETE /api/freets/:id
+ *
+ * @return {string} - A success message
+ * @throws {403} - If the user is not logged in or is not the author of
+ *                 the freet
+ * @throws {404} - If the freetId is not valid
+ */
+router.delete(
+  '/:commentId?',
+  [
+    userValidator.isUserLoggedIn,
+    commentValidator.isOriginalFreetExists
+  ],
+  async (req: Request, res: Response) => {
+    await CommentCollection.deleteOne(req.params.commentId);
+    res.status(200).json({
+      message: 'Your comment was deleted successfully.'
+    });
+  }
+);
+
+/**
+ * Modify a freet
+ *
+ * @name PUT /api/freets/:id
+ *
+ * @param {string} content - the new content for the freet
+ * @return {FreetResponse} - the updated freet
+ * @throws {403} - if the user is not logged in or not the author of
+ *                 of the freet
+ * @throws {404} - If the freetId is not valid
+ * @throws {400} - If the freet content is empty or a stream of empty spaces
+ * @throws {413} - If the freet content is more than 140 characters long
+ */
+router.put(
+  '/:commentId?',
+  [
+    userValidator.isUserLoggedIn,
+    commentValidator.isValidCommentModifier,
+    commentValidator.isCommentExists,
+    commentValidator.isValidCommentContent
+  ],
+  async (req: Request, res: Response) => {
+    const comment = await CommentCollection.updateOne(req.params.commentId, req.body.content);
+    res.status(200).json({
+      message: 'Your freet was updated successfully.',
+      freet: util.constructCommentResponse(comment)
+    });
+  }
+);
+
+export {router as freetRouter};
