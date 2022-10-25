@@ -25,8 +25,8 @@ import ReactCollection from '../react/collection';
  * spaces and not more than 140 characters
  */
 const isValidReaction = (req: Request, res: Response, next: NextFunction) => {
-  const {content} = req.body as {content: string};
-  if (!(content === "Like" || content === "Love" || content === "Wow" || content === "Angry" || content === "Sad")) {
+  const {reaction} = req.body as {reaction: string};
+  if (!(reaction === "Like" || reaction === "Love" || reaction === "Wow" || reaction === "Angry" || reaction === "Sad")) {
     res.status(400).json({
       error: 'invalid reaction'
     });
@@ -54,12 +54,12 @@ const isValidReaction = (req: Request, res: Response, next: NextFunction) => {
 
 const previousReactionExists = async (req: Request, res: Response, next: NextFunction) => {
     //const reactorId = React
-    const validFormat = Types.ObjectId.isValid(req.params.reactorId);
-    const react= validFormat ? await ReactCollection.findOneByUsernameAndFreet(req.session.reactorId, req.params.freetId)  : '';  
+    const validFormat = Types.ObjectId.isValid(req.params.reactId);
+    const react= validFormat ? await ReactCollection.findOne(req.params.reactId)  : '';  
     if (!react) {
         res.status(404).json({
           error: {
-            freetNotFound: `Freet doesn't exist`
+            freetNotFound: `React doesn't exist`
           }
         });
         return;
@@ -72,10 +72,10 @@ const previousReactionExists = async (req: Request, res: Response, next: NextFun
     //const reactorId = React
     const validFormat = Types.ObjectId.isValid(req.params.reactorId);
     const react= validFormat ? await ReactCollection.findOneByUsernameAndFreet(req.session.reactorId, req.params.freetId)  : '';  
-    if (react) {
+    if (react !== null) {
         res.status(404).json({
           error: {
-            freetNotFound: `Freet doesn't exist`
+            freetNotFound: `You already reacted`
           }
         });
         return;
@@ -84,11 +84,24 @@ const previousReactionExists = async (req: Request, res: Response, next: NextFun
       next();
   };
 
+  const isValidReactModifier = async (req: Request, res: Response, next: NextFunction) => {
+    const freet = await ReactCollection.findOne(req.params.reactId);
+    const userId = freet.reactorId._id;
+    if (req.session.userId !== userId.toString()) {
+      res.status(403).json({
+        error: 'Cannot modify other users\' reacts.'
+      });
+      return;
+    }
+  
+    next();
+  };
 
 export {
   isValidReaction,
   previousReactionExists,
-  previousReactionNotExists
+  previousReactionNotExists,
+  isValidReactModifier
   //isFreetExists,
   //checkPreviousReaction
 };

@@ -1,6 +1,6 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
-import type {React} from '../react/model';
+import type {React, PopulatedReact} from '../react/model';
 
 // Update this if you add a property to the Freet type!
 type ReactResponse = {
@@ -28,16 +28,20 @@ const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:
  */
 const constructReactResponse = (react: HydratedDocument<React>): ReactResponse => {
 
-    const reactCopy: React = {
+    const reactCopy: PopulatedReact = {
         ...react.toObject({
             versionKey: false // Cosmetics; prevents returning of __v property
         })
         };
+        const {_id} = reactCopy.freetId;
+        delete reactCopy.freetId;
+        const {username} = reactCopy.reactorId;
+        delete reactCopy.reactorId;
         return {
         ...reactCopy,
         _id: reactCopy._id.toString(),
-        reactorId: reactCopy.freetId.toString(),
-        freetId: reactCopy.freetId.toString(),
+        reactorId: username,
+        freetId: _id.toString(),
         reaction: reactCopy.reaction.toString()
         };
 };

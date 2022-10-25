@@ -50,6 +50,16 @@ const formsAndHandlers = {
   'create-viewOnlyMode': createViewOnlyRelationship,
   'update-viewOnlyMode': updateViewOnlyMode,
   'create-react': createReact,
+  'delete-React': deleteReact,
+  'edit-React': editReact,
+  'view-all-comments': viewAllComments,
+  'view-comments-by-commentor': viewCommentsByCommentor,
+  'create-comment': createComment,
+  'edit-comment': editComment,
+  'delete-comment': deleteComment,
+  'create-shoppingCart': createShoppingCart,
+  'add-to-cart': addToCart,
+  'delete-shoppingCart': deleteCart
 
 };
 

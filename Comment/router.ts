@@ -117,4 +117,4 @@ router.put(
   }
 );
 
-export {router as reactRouter};
+export {router as commentRouter};

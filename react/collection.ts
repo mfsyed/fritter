@@ -2,6 +2,7 @@ import type {HydratedDocument, Types} from 'mongoose';
 import type {React} from './model';
 import ReactModel from './model';
 import UserCollection from '../user/collection';
+import FreetCollection from '../freet/collection';
 
 /**
  * This files contains a class that has the functionality to explore freets
@@ -21,6 +22,8 @@ class ReactCollection {
    */
   static async addOne(reactorId: Types.ObjectId | string, freetId: Types.ObjectId | string, reaction: string): Promise<HydratedDocument<React>> {
     //const date = new Date();
+    const freet = await FreetCollection.findOne(freetId);
+
     const react = new ReactModel({
       freetId,
       reactorId,
@@ -28,7 +31,7 @@ class ReactCollection {
 
     });
     await react.save(); // Saves freet to MongoDB
-    return react.populate('authorId');
+    return react.populate('reactorId');
   }
 
   /**
@@ -38,7 +41,7 @@ class ReactCollection {
    * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
    */
   static async findOne(reactId: Types.ObjectId | string): Promise<HydratedDocument<React>> {
-    return ReactModel.findOne({_id: reactId}).populate('authorId');
+    return ReactModel.findOne({_id: reactId}).populate('reactorId');
   }
 
 
@@ -75,11 +78,11 @@ class ReactCollection {
    * @param {string} content - The new content of the freet
    * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
    */
-  static async updateOne(freetId: Types.ObjectId | string, reaction: string): Promise<HydratedDocument<React>> {
-    const react = await ReactModel.findOne({_id: freetId});
+  static async updateOne(reactId: Types.ObjectId | string, reaction: string): Promise<HydratedDocument<React>> {
+    const react = await ReactModel.findOne({_id: reactId});
     react.reaction = reaction;
     await react.save();
-    return react.populate('authorId');
+    return react.populate('reactorId');
   }
 
   /**

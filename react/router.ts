@@ -67,7 +67,8 @@ router.post(
     userValidator.isUserLoggedIn,
     freetValidator.isFreetExists,
     reactValidator.isValidReaction,
-    freetValidator.isValidFreetModifier
+    reactValidator.previousReactionNotExists
+    //freetValidator.isValidFreetModifier
   ],
   async (req: Request, res: Response) => {
     const reactorId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
@@ -95,7 +96,9 @@ router.delete(
   '/:reactId?',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExists,
+    //freetValidator.isFreetExists,
+    reactValidator.previousReactionExists,
+    reactValidator.isValidReactModifier
     //freetValidator.isValidFreetModifier
   ],
   async (req: Request, res: Response) => {
@@ -123,7 +126,9 @@ router.put(
   '/:reactId?',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExists,
+    //freetValidator.isFreetExists,
+    reactValidator.previousReactionExists,
+    reactValidator.isValidReactModifier
     //freetValidator.isValidFreetModifier,
     // freetValidator.isValidFreetContent
   ],

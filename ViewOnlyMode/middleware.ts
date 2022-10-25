@@ -30,9 +30,11 @@ import ViewOnlyModeCollection from '../ViewOnlyMode/collection';
  const isValidViewOnlyModeStatusModifier = async (req: Request, res: Response, next: NextFunction) => {
     const viewOnlyMode = await ViewOnlyModeCollection.findOneByViewOnlyModeId(req.params.viewOnlyModeId);
     const viewerId = viewOnlyMode.viewer._id;
+    console.log(req.session.userId);
+    console.log(viewerId.toString());
     if (req.session.userId !== viewerId.toString()) {
       res.status(403).json({
-        error: 'Not a viewer!!!'
+        error: 'Not a viewer!!! :('
       });
       return;
     }

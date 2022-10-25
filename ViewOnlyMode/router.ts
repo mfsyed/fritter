@@ -86,7 +86,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? '';
-    const viewOnlyMode = await ViewOnlyModeCollection.addOne(userId, req.params.viewee);
+    const viewOnlyMode = await ViewOnlyModeCollection.addOne(req.params.viewee, userId);
     res.status(201).json({
       message: `created view only mode object`,
       user: util.constructViewOnlyModeResponse(viewOnlyMode)

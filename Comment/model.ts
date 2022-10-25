@@ -7,7 +7,7 @@ import type {Freet} from '../Freet/model';
  * DO NOT implement operations here ---> use collection file
  */
 
-// Type definition for Freet on the backend
+// Type definition for Comment on the backend
 export type Comment = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   commentorId: Types.ObjectId;
@@ -27,10 +27,9 @@ export type PopulatedComment = {
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
-// Freets stored in this table will have these fields, with the
-// type given by the type property, inside MongoDB
+
 const CommentSchema = new Schema<Comment>({
-  // The author userId
+  // commentor
   commentorId: {
     // Use Types.ObjectId outside of the schema
     type: Schema.Types.ObjectId,
@@ -43,17 +42,17 @@ const CommentSchema = new Schema<Comment>({
     required: true,
     ref: 'Freet'
   },
-  // The date the freet was created
+  // The date the comment was created
   dateCreated: {
     type: Date,
     required: true
   },
-  // The content of the freet
+  // The content of the comment
   content: {
     type: String,
     required: true
   },
-  // The date the freet was modified
+  // The date the comment was modified
   dateModified: {
     type: Date,
     required: true

@@ -11,6 +11,7 @@
   <script src="/scripts/itemForSale.js"></script>
   <script src="/scripts/react.js"></script>
   <script src="/scripts/viewOnlyMode.js"></script>
+  <script src="/scripts/comment.js"></script>
   <script src="/scripts/index.js"></script>
   
 </head>
@@ -219,6 +220,15 @@
         <input type="submit" value="Edit ItemForSale Link">
       </form>
 
+      <form id="delete-itemForSale">
+        <h3> Delete ItemForSale</h3>
+        <div>
+          <label for="id">ID:</label>
+          <input id="id" name="id">
+        </div>
+        <input type="submit" value="Delete ItemForSale Link">
+      </form>
+
       <form id="create-viewOnlyMode">
         <h3>Create ViewOnlyMode Relationship</h3>
         <div>
@@ -236,6 +246,113 @@
         </div>
         <input type="submit" value="Update ViewOnlyModeState">
       </form>
+
+      <form id="edit-React">
+        <h3>Edit React</h3>
+        <div>
+          <label for="id">ID:</label>
+          <input id="id" name="id">
+        </div>
+        <div>
+          <label for="reaction">Content:</label>
+          <textarea id="reaction" name="reaction"></textarea>
+        </div>
+        <input type="submit" value="Edit React">
+      </form>
+
+      <form id="delete-React">
+        <h3>Delete React</h3>
+        <div>
+          <label for="id">ID:</label>
+          <input id="id" name="id">
+        </div>
+        <input type="submit" value="Delete React">
+      </form>
+
+
+
+
+
+    <form id="view-all-comments">
+      <h3>View All Comments</h3>
+      <input type="submit" value="View All Comments">
+    </form>
+
+    <form id="view-comments-by-commentor">
+      <h3>View Comments By Author</h3>
+      <div>
+        <label for="commentor">Author:</label>
+        <input id="commentor" name="commentor">
+      </div>
+      <input type="submit" value="View Freets By Commentor">
+    </form>
+
+    <form id="create-comment">
+      <h3>Create Comment</h3>
+      <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+      </div>
+      <input type="submit" value="Create Freet">
+    </form>
+
+    <form id="edit-comment">
+      <h3>Edit Comment</h3>
+      <div>
+        <label for="id">ID:</label>
+        <input id="id" name="id">
+      </div>
+      <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+      </div>
+      <input type="submit" value="Edit Freet">
+    </form>
+
+    <form id="delete-comment">
+      <h3>Delete Comment</h3>
+      <div>
+        <label for="id">ID:</label>
+        <input id="id" name="id">
+      </div>
+      <input type="submit" value="Delete Comment">
+    </form>
+
+
+
+
+    <form id="create-shoppingCart">
+      <h3>Create Comment</h3>
+      <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+      </div>
+      <input type="submit" value="Create Freet">
+    </form>
+
+    <form id="add-to-cart">
+      <h3>Edit Comment</h3>
+      <div>
+        <label for="id">ID:</label>
+        <input id="id" name="id">
+      </div>
+      <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+      </div>
+      <input type="submit" value="Edit Freet">
+    </form>
+
+    <form id="delete-shoppingCart">
+      <h3>Delete Comment</h3>
+      <div>
+        <label for="id">ID:</label>
+        <input id="id" name="id">
+      </div>
+      <input type="submit" value="Delete Comment">
+    </form>
+
+
 
 
       </div>

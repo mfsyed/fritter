@@ -61,7 +61,7 @@ class CommentCollection {
    */
   static async findAllByFreet(freet: string): Promise<Array<HydratedDocument<Comment>>> {
     const originalFreet = await FreetCollection.findOne(freet);
-    return CommentModel.find({originalFreedId: originalFreet._id}).populate('originalFreetId');
+    return CommentModel.find({originalFreedId: originalFreet._id}).populate('commentorId');
   }
 
   /**

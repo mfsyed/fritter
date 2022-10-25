@@ -15,6 +15,8 @@ import {itemForSaleRouter} from '../ItemForSale/router';
 import {reportRouter} from '../report/router';
 import {viewOnlyModeRouter} from '../ViewOnlyMode/router';
 import {reactRouter} from '../react/router';
+import {commentRouter} from '../Comment/router';
+import {shoppingCartRouter} from '../shoppingCart/router';
 // Load environmental variables
 dotenv.config({});
 
@@ -84,6 +86,8 @@ app.use('/api/reports', reportRouter);
 app.use('/api/itemsForSale', itemForSaleRouter);
 app.use('/api/viewOnlyMode', viewOnlyModeRouter);
 app.use('/api/react', reactRouter);
+app.use('/api/comment', commentRouter);
+app.use('/api/shoppingCarts', shoppingCartRouter);
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {
   res.status(400).render('error');
