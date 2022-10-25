@@ -43,6 +43,7 @@ const constructCommentResponse = (comment: HydratedDocument<Comment>): CommentRe
     commentor: username,
     originalFreetId: commentCopy.originalFreetId._id.toString(),
     dateCreated: formatDate(comment.dateCreated),
+    content: commentCopy.content,
     dateModified: formatDate(comment.dateModified)
   };
 };

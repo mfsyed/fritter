@@ -16,9 +16,10 @@ class CommentCollection {
   /**
    * Add a freet to the collection
    *
-   * @param {string} authorId - The id of the author of the freet
+   * @param {string} commentorId - The id of the commentor of the comment
+   * @param {string} originalFreetId - The id of the orginal freet commentor is commenting on
    * @param {string} content - The id of the content of the freet
-   * @return {Promise<HydratedDocument<Freet>>} - The newly created freet
+   * @return {Promise<HydratedDocument<Comment>>} - The newly created freet
    */
   static async addOne(commentorId: Types.ObjectId | string, originalFreetId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Comment>> {
     const date = new Date();
@@ -34,10 +35,10 @@ class CommentCollection {
   }
 
   /**
-   * Find a freet by freetId
+   * Find a comment by commentId
    *
    * @param {string} freetId - The id of the freet to find
-   * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
+   * @return {Promise<HydratedDocument<Comment>> | Promise<null> } - The freet with the given freetId, if any
    */
   static async findOne(commentId: Types.ObjectId | string): Promise<HydratedDocument<Comment>> {
     return CommentModel.findOne({_id: commentId}).populate('commentorId');
@@ -59,7 +60,7 @@ class CommentCollection {
    * @param {string} username - The username of author of the freets
    * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
    */
-  static async findAllByFreet(freet: string): Promise<Array<HydratedDocument<Comment>>> {
+  static async findAllByFreet(freet: Types.ObjectId | string): Promise<Array<HydratedDocument<Comment>>> {
     const originalFreet = await FreetCollection.findOne(freet);
     return CommentModel.find({originalFreedId: originalFreet._id}).populate('commentorId');
   }
@@ -67,9 +68,9 @@ class CommentCollection {
   /**
    * Update a freet with the new content
    *
-   * @param {string} freetId - The id of the freet to be updated
-   * @param {string} content - The new content of the freet
-   * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
+   * @param {string} commenttId - The id of the comment to be updated
+   * @param {string} content - The new content of the comment
+   * @return {Promise<HydratedDocument<Comment>>} - The newly updated comment
    */
   static async updateOne(commentId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Comment>> {
     const comment = await CommentModel.findOne({_id: commentId});
@@ -80,9 +81,9 @@ class CommentCollection {
   }
 
   /**
-   * Delete a freet with given freetId.
+   * Delete a comment with given freetId.
    *
-   * @param {string} freetId - The freetId of freet to delete
+   * @param {string} commentId - The freetId of freet to delete
    * @return {Promise<Boolean>} - true if the freet has been deleted, false otherwise
    */
   static async deleteOne(commentId: Types.ObjectId | string): Promise<boolean> {
@@ -93,10 +94,10 @@ class CommentCollection {
   /**
    * Delete all the freets by the given author
    *
-   * @param {string} authorId - The id of author of freets
+   * @param {string} originalFreetId: the id the of the freet the comment referred to.
    */
-  static async deleteMany(freetId: Types.ObjectId | string): Promise<void> {
-    await CommentModel.deleteMany({freetId});
+  static async deleteMany(originalFreetId: Types.ObjectId | string): Promise<void> {
+    await CommentModel.deleteMany({originalFreetId});
   }
 }
 
