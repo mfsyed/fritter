@@ -62,8 +62,8 @@ class ItemForSaleCollection {
    * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
    */
   static async findAllItemsByUsername(username: string): Promise<Array<HydratedDocument<ItemForSale>>> {
-    const author = await UserCollection.findOneByUsername(username);
-    return ItemForSaleModel.find({authorId: author._id}).populate('sellerId');
+    const seller = await UserCollection.findOneByUsername(username);
+    return ItemForSaleModel.find({sellerId: seller._id}).populate('sellerId');
   }
 
 

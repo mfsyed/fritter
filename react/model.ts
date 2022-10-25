@@ -25,7 +25,7 @@ export type PopulatedReact = {
 // Mongoose schema definition for interfacing with a MongoDB table
 // Freets stored in this table will have these fields, with the
 // type given by the type property, inside MongoDB
-const FreetSchema = new Schema<React>({
+const ReactSchema = new Schema<React>({
   // The author userId
   freetId: {
     // Use Types.ObjectId outside of the schema
@@ -47,5 +47,5 @@ const FreetSchema = new Schema<React>({
   }
 });
 
-const FreetModel = model<Freet>('Freet', FreetSchema);
-export default FreetModel;
+const ReactModel = model<React>('React', ReactSchema);
+export default ReactModel;

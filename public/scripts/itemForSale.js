@@ -18,18 +18,20 @@
   }
   
   function createItemForSale(fields) {
-    fetch('/api/itemsForSale', {method: 'POST', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
+    fetch('/api/itemsForSale', {method: 'POST', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json','Accept': 'application/json'}})
       .then(showResponse)
       .catch(showResponse);
   }
   
   function editDescription(fields) {
+    console.log("hey");
     fetch(`/api/itemsForSale/${fields.id}`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
       .then(showResponse)
       .catch(showResponse);
   }
   
   function editPrice(fields) {
+    console.log("price change");
     fetch(`/api/itemsForSale/${fields.id}`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
       .then(showResponse)
       .catch(showResponse);

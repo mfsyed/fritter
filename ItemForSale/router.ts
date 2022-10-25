@@ -5,6 +5,8 @@ import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
 import * as ItemForSaleValidator from '../ItemForSale/middleware';
 import * as util from './util';
+import { previousReactionNotExists } from 'react/middleware';
+import e from 'express';
 
 const router = express.Router();
 
@@ -30,7 +32,10 @@ router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
     // Check if authorId query parameter was supplied
-    if (req.query.seller !== undefined) {
+    console.log(req.params);
+    console.log(req.query);
+    console.log(req.body);
+    if (req.query.seller!== undefined) {
       next();
       return;
     }
@@ -41,11 +46,15 @@ router.get(
   },
 
   [
-    userValidator.isAuthorExists
+    userValidator.isSellerExists
   ],
   async (req: Request, res: Response) => {
+    console.log(req.params);
+    console.log(req.query);
+    console.log(req.body);
     const sellerItemsForSale = await ItemForSaleCollection.findAllItemsByUsername(req.query.seller as string);
     const response = sellerItemsForSale.map(util.constructItemForSaleResponse);
+    console.log(response);
     res.status(200).json(response);
   }
 );
@@ -70,8 +79,9 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    console.log(userId);
     const itemForSale = await ItemForSaleCollection.addItem(userId, req.body.description, req.body.price, req.body.link);
-
+    
     res.status(201).json({
       message: 'Your freet was created successfully.',
       itemForSale: util.constructItemForSaleResponse(itemForSale)
@@ -117,15 +127,42 @@ router.delete(
  * @throws {400} - If the freet content is empty or a stream of empty spaces
  * @throws {413} - If the freet content is more than 140 characters long
  */
+
+ router.put(
+  '/:itemForSaleId?',
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.price || req.body.description) next('route');
+    else next();
+  },
+  [
+      userValidator.isUserLoggedIn,
+      ItemForSaleValidator.isItemForSaleExists,
+      ItemForSaleValidator.isValidItemForSaleModifier
+  ],
+  async (req: Request, res: Response) => {
+      const itemForSale= await ItemForSaleCollection.updateLink(req.params.itemForSaleId, req.body.link);
+      res.status(200).json({
+      message: 'Your freet was updated successfully.',
+      itemForSale: util.constructItemForSaleResponse(itemForSale)
+      });
+  }
+);
+
+
 router.put(
   '/:itemForSaleId?',
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.price) next('route');
+    else next();
+  },
   [
     userValidator.isUserLoggedIn,
     ItemForSaleValidator.isItemForSaleExists,
     ItemForSaleValidator.isValidItemForSaleModifier,
     ItemForSaleValidator.isValidFreetDescription
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    //if(req.body.price !== null || req.body.link !== null) next('route');
     const itemForSale = await ItemForSaleCollection.updateDescription(req.params.itemForSaleId, req.body.description);
     res.status(200).json({
       message: 'Your freet was updated successfully.',
@@ -142,31 +179,15 @@ router.put(
         ItemForSaleValidator.isValidItemForSaleModifier,
         ItemForSaleValidator.isValidPrice
     ],
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
+      if(req.body.link !== null) next('route');
       const itemForSale = await ItemForSaleCollection.updatePrice(req.params.itemForSaleId, req.body.price);
       res.status(200).json({
-        message: 'Your freet was updated successfully.',
+        message: 'Your itemForSale price was updated successfully.',
         itemForSale: util.constructItemForSaleResponse(itemForSale)
       });
     }
   );
   
 
-router.put(
-    '/:itemForSaleId?',
-    [
-        userValidator.isUserLoggedIn,
-        ItemForSaleValidator.isItemForSaleExists,
-        ItemForSaleValidator.isValidItemForSaleModifier
-    ],
-    async (req: Request, res: Response) => {
-        const itemForSale= await ItemForSaleCollection.updatePrice(req.params.itemForSaleId, req.body.link);
-        res.status(200).json({
-        message: 'Your freet was updated successfully.',
-        itemForSale: util.constructItemForSaleResponse(itemForSale)
-        });
-    }
-);
-
-
-export {router as freetRouter};
+export {router as itemForSaleRouter};

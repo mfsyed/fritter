@@ -11,9 +11,10 @@ import dotenv from 'dotenv';
 import * as userValidator from '../user/middleware';
 import {userRouter} from '../user/router';
 import {freetRouter} from '../freet/router';
-
+import {itemForSaleRouter} from '../ItemForSale/router';
 import {reportRouter} from '../report/router';
-
+import {viewOnlyModeRouter} from '../ViewOnlyMode/router';
+import {reactRouter} from '../react/router';
 // Load environmental variables
 dotenv.config({});
 
@@ -79,7 +80,10 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/users', userRouter);
 app.use('/api/freets', freetRouter);
 app.use('/api/reports', reportRouter);
-
+app.use('/api/reports', reportRouter);
+app.use('/api/itemsForSale', itemForSaleRouter);
+app.use('/api/viewOnlyMode', viewOnlyModeRouter);
+app.use('/api/react', reactRouter);
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {
   res.status(400).render('error');

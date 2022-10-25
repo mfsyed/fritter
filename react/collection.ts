@@ -77,7 +77,7 @@ class ReactCollection {
    */
   static async updateOne(freetId: Types.ObjectId | string, reaction: string): Promise<HydratedDocument<React>> {
     const react = await ReactModel.findOne({_id: freetId});
-    react.content = reaction;
+    react.reaction = reaction;
     await react.save();
     return react.populate('authorId');
   }

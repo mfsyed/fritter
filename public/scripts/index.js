@@ -46,13 +46,17 @@ const formsAndHandlers = {
   'edit-description': editDescription,
   'edit-price': editPrice,
   'edit-link': editLink,
-  'delete-itemForSale': deleteItemForSale
+  'delete-itemForSale': deleteItemForSale,
+  'create-viewOnlyMode': createViewOnlyRelationship,
+  'update-viewOnlyMode': updateViewOnlyMode,
+  'create-react': createReact,
 
 };
 
 // Attach handlers to forms
 function init() {
   Object.entries(formsAndHandlers).forEach(([formID, handler]) => {
+    console.log(formID);
     const form = document.getElementById(formID);
     form.onsubmit = e => {
       e.preventDefault();

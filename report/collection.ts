@@ -29,7 +29,7 @@ class ReportCollection {
       dateReported: date
     });
     await report.save(); // Saves freet to MongoDB
-    return report.populate('authorId');
+    return report.populate('freetId');
   }
 
 //   /**

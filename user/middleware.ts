@@ -153,6 +153,28 @@ const isAuthorExists = async (req: Request, res: Response, next: NextFunction) =
   next();
 };
 
+
+const isSellerExists = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.query);
+    console.log(req.body);
+  if (!req.query.seller) {
+    res.status(400).json({
+      error: 'Provided seller username must be nonempty.'
+    });
+    return;
+  }
+
+  const user = await UserCollection.findOneByUsername(req.query.seller as string);
+  if (!user) {
+    res.status(404).json({
+      error: `A user with username ${req.query.seller as string} does not exist.`
+    });
+    return;
+  }
+
+  next();
+};
+
 export {
   isCurrentSessionUserExists,
   isUserLoggedIn,
@@ -160,6 +182,7 @@ export {
   isUsernameNotAlreadyInUse,
   isAccountExists,
   isAuthorExists,
+  isSellerExists,
   isValidUsername,
   isValidPassword
 };

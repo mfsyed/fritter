@@ -147,4 +147,4 @@ router.put(
 //   }
 // );
 
-export {router as userRouter};
+export {router as viewOnlyModeRouter};
