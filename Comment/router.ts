@@ -8,32 +8,32 @@ import * as util from './util';
 
 const router = express.Router();
 
-/**
- * Get all the freets
- *
- * @name GET /api/comment
- *
- * @return {FreetResponse[]} - A list of all the freets sorted in descending
- *                      order by date modified
- */
-/**
- * Get freets by author.
- *
- * @name GET /api/freets?authorId=id
- *
- * @return {CommentResponse[]} - An array of commentor created by user with id, commentorId
- * @throws {400} - If commentorId is not given
- * @throws {404} - If no user has given commentorId
- *
- */
-router.get(
-  '/',
-  async (req: Request, res: Response) => {
-    const freetComments = await CommentCollection.findAllByFreet(req.query.freet as string);
-    const response = freetComments.map(util.constructCommentResponse);
-    res.status(200).json(response);
-  }
-);
+// /**
+//  * Get all the freets
+//  *
+//  * @name GET /api/comment
+//  *
+//  * @return {CommentResponse[]} - A list of all the freets sorted in descending
+//  *                      order by date modified
+//  */
+// /**
+//  * Get freets by author.
+//  *
+//  * @name GET /api/freets?authorId=id
+//  *
+//  * @return {CommentResponse[]} - An array of commentor created by user with id, commentorId
+//  * @throws {400} - If commentorId is not given
+//  * @throws {404} - If no user has given commentorId
+//  *
+//  */
+// router.get(
+//   '/',
+//   async (req: Request, res: Response) => {
+//     const freetComments = await CommentCollection.findAllByFreet(req.query.freet as string);
+//     const response = freetComments.map(util.constructCommentResponse);
+//     res.status(200).json(response);
+//   }
+// );
 
 /**
  * Create a new comment.

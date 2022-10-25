@@ -54,16 +54,16 @@ class CommentCollection {
 //     return CommentModel.find({}).sort({dateModified: -1}).populate('commentorId');
 //   }
 
-  /**
-   * Get all the freets in by given author
-   *
-   * @param {string} username - The username of author of the freets
-   * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
-   */
-  static async findAllByFreet(freet: Types.ObjectId | string): Promise<Array<HydratedDocument<Comment>>> {
-    const originalFreet = await FreetCollection.findOne(freet);
-    return CommentModel.find({originalFreedId: originalFreet._id}).populate('commentorId');
-  }
+  // /**
+  //  * Get all the freets in by given author
+  //  *
+  //  * @param {string} username - The username of author of the freets
+  //  * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+  //  */
+  // static async findAllByFreet(freet: Types.ObjectId | string): Promise<Array<HydratedDocument<Comment>>> {
+  //   const originalFreet = await FreetCollection.findOne(freet);
+  //   return CommentModel.find({originalFreedId: originalFreet._id}).populate('commentorId');
+  // }
 
   /**
    * Update a freet with the new content

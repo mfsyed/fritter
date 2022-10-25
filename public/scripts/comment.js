@@ -5,17 +5,17 @@
  * e.g. for createUser, fields has properites 'username' and 'password'
  */
 
- function viewAllComments(fields) {
-    fetch('/api/freets')
-      .then(showResponse)
-      .catch(showResponse);
-  }
+//  function viewAllComments(fields) {
+//     fetch('/api/freets')
+//       .then(showResponse)
+//       .catch(showResponse);
+//   }
   
-  function viewCommentsByCommentor(fields) {
-    fetch(`/api/freets?commentor=${fields.commentor}`)
-      .then(showResponse)
-      .catch(showResponse);
-  }
+//   function viewCommentsByCommentor(fields) {
+//     fetch(`/api/freets?commentor=${fields.commentor}`)
+//       .then(showResponse)
+//       .catch(showResponse);
+//   }
   
   function createComment(fields) {
     fetch('/api/freets', {method: 'POST', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
