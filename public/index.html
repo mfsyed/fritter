@@ -152,12 +152,12 @@
         </form>
 
       <form id="view-all-itemsForSale">
-        <h3>View All Freets</h3>
+        <h3>View All ItemsForSale</h3>
         <input type="submit" value="View All itemsForSale">
       </form>
 
       <form id="view-itemsForSale-by-seller">
-        <h3>View Freets By Seller</h3>
+        <h3>View ItemsForSale By Seller</h3>
         <div>
           <label for="seller">Seller:</label>
           <input id="seller" name="seller">
@@ -224,8 +224,8 @@
       <form id="delete-itemForSale">
         <h3> Delete ItemForSale</h3>
         <div>
-          <label for="id">ID:</label>
-          <input id="id" name="id">
+          <label for="cartId">ID:</label>
+          <input id="cartId" name="cartId">
         </div>
         <input type="submit" value="Delete ItemForSale Link">
       </form>
@@ -291,6 +291,10 @@
     <form id="create-comment">
       <h3>Create Comment</h3>
       <div>
+        <label for="id">ID:</label>
+        <input id="id" name="id">
+      </div>
+      <div>
         <label for="content">Content:</label>
         <textarea id="content" name="content"></textarea>
       </div>
@@ -323,34 +327,58 @@
 
 
     <form id="create-shoppingCart">
-      <h3>Create Comment</h3>
-      <div>
-        <label for="content">Content:</label>
-        <textarea id="content" name="content"></textarea>
-      </div>
+      <h3>Create Shopping Cart</h3>
       <input type="submit" value="Create Freet">
     </form>
 
+    <form id="view-all-shoppingCarts">
+      <h3>View All ShoppingCarts</h3>
+      <input type="submit" value="View All shoppingCarts">
+    </form>
+
     <form id="add-to-cart">
-      <h3>Edit Comment</h3>
+      <h3>Add Item to Cart</h3>
       <div>
-        <label for="id">ID:</label>
-        <input id="id" name="id">
+        <label for="cartId"> ShoppingCart ID:</label>
+        <input id="cartId" name="cartId">
       </div>
       <div>
+        <label for="itemForSaleId"> Item ID:</label>
+        <input id="itemForSaleId" name="itemForSaleId">
+      </div>
+      <!-- <div>
         <label for="content">Content:</label>
         <textarea id="content" name="content"></textarea>
-      </div>
+      </div> -->
       <input type="submit" value="Edit Freet">
     </form>
 
+
+    <form id="delete-from-cart">
+      <h3>Add Item to Cart</h3>
+      <div>
+        <label for="cartIdRemoveFrom"> ShoppingCart ID:</label>
+        <input id="cartIdRemoveFrom" name="cartIdRemoveFrom">
+      </div>
+      <div>
+        <label for="itemForSaleId"> Item ID:</label>
+        <input id="itemForSaleId" name="itemForSaleId">
+      </div>
+      <!-- <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+      </div> -->
+      <input type="submit" value="Delete From Cart">
+    </form>
+
+
     <form id="delete-shoppingCart">
-      <h3>Delete Comment</h3>
+      <h3>Delete Cart</h3>
       <div>
         <label for="id">ID:</label>
         <input id="id" name="id">
       </div>
-      <input type="submit" value="Delete Comment">
+      <input type="submit" value="Delete Item From Cart">
     </form>
 
 

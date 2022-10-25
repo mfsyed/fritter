@@ -11,13 +11,19 @@ import ItemForSaleCollection from '../ItemForSale/collection';
  * Checks if a freet with freetId is req.params exists
  */
 const isItemForSaleExists = async (req: Request, res: Response, next: NextFunction) => {
+  // console.log(req.body);
+
   console.log("hi");
+  console.log(req.params);
+  console.log(req.body);
   const validFormat = Types.ObjectId.isValid(req.params.itemForSaleId);
+  const validFormatBody = Types.ObjectId.isValid(req.params.itemForSaleId);
   const itemForSale = validFormat ? await ItemForSaleCollection.findOne(req.params.itemForSaleId) : '';
-  if (!itemForSale) {
+  const itemForSaleBody = validFormatBody ? await ItemForSaleCollection.findOne(req.body.itemForSaleId) : '';
+  if (!itemForSale && !itemForSaleBody) {
     res.status(404).json({
       error: {
-        freetNotFound: `itemForSale does not exist`
+        itemNotFound: `itemForSale does not exist`
       }
     });
     return;

@@ -53,6 +53,7 @@ router.post(
     freetValidator.isValidFreetContent
   ],
   async (req: Request, res: Response) => {
+    console.log(req.params);
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const comment = await CommentCollection.addOne(userId, req.params.originalFreetId, req.body.content);
 
@@ -77,7 +78,8 @@ router.delete(
   '/:commentId?',
   [
     userValidator.isUserLoggedIn,
-    commentValidator.isOriginalFreetExists
+    commentValidator.isCommentExists,
+    //commentValidator.isOriginalFreetExists
   ],
   async (req: Request, res: Response) => {
     await CommentCollection.deleteOne(req.params.commentId);

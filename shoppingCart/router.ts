@@ -29,19 +29,19 @@ const router = express.Router();
 //  * @throws {404} - If no user has given authorId
 //  *
 //  */
-// router.get(
-//   '/',
-//   // async (req: Request, res: Response, next: NextFunction) => {
-//   //   // Check if authorId query parameter was supplied
-//   //   if (req.query.author !== undefined) {
-//   //     next();
-//   //     return;
-//   //   }
+router.get(
+  '/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Check if authorId query parameter was supplied
+    if (req.query.cartOwner !== undefined) {
+      next();
+      return;
+    }
 
-//   //   const allFreets = await FreetCollection.findAll();
-//   //   const response = allFreets.map(util.constructShoppingCartResponse);
-//   //   res.status(200).json(response);
-//   // },
+    const allCarts = await ShoppingCartCollection.findAll();
+    const response = allCarts.map(util.constructShoppingCartResponse);
+    res.status(200).json(response);
+  },
 //   [
 //     userValidator.isAuthorExists
 //   ],
@@ -51,7 +51,7 @@ const router = express.Router();
 //     const response = util.constructShoppingCartResponse(userCart);
 //     res.status(200).json(response);
 //   }
-// );
+);
 
 /**
  * Create a new freet.
@@ -68,6 +68,7 @@ router.post(
     '/',
   [
     userValidator.isUserLoggedIn,
+    //shoppingCartValidator.doesUserAlreadyHaveShoppingCart
     //freetValidator.isValidFreetContent
   ],
   async (req: Request, res: Response) => {
@@ -121,22 +122,49 @@ router.delete(
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.put(
-  '/:itemId?',
+  '/:itemForSaleId',
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.cartIdRemoveFrom) next('route');
+    else next();
+  },
   [
     userValidator.isUserLoggedIn,
-    shoppingCartValidator.isValidaCartModifier,
+    //shoppingCartValidator.isValidCartModifier,
     shoppingCartValidator.doesShoppingCartExist,
     itemForSaleValidator.isItemForSaleExists
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? '';
-    const cart = await ShoppingCartCollection.findCartByUsername(userId);
-    const freet = await ShoppingCartCollection.addToCart(userId, req.params.itemId);
+    //const {username} = await UserCollection.findOneByUserId(userId);
+    //const cart = await ShoppingCartCollection.findCartByUsername(username);
+    //const cart = await ShoppingCartCollection.findCartByUserId(userId);
+    console.log("will add");
+    const freet = await ShoppingCartCollection.addToCart(req.body.cartId, req.params.itemForSaleId);
     res.status(200).json({
       message: 'Your freet was updated successfully.',
-      freet: util.constructShoppingCartResponse(freet)
+      cart: util.constructShoppingCartResponse(freet)
+    });
+  },
+
+  [
+    userValidator.isUserLoggedIn,
+    //shoppingCartValidator.isValidCartModifier,
+    shoppingCartValidator.doesShoppingCartExist,
+    itemForSaleValidator.isItemForSaleExists
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? '';
+    //const {username} = await UserCollection.findOneByUserId(userId);
+    //const cart = await ShoppingCartCollection.findCartByUsername(username);
+    //const cart = await ShoppingCartCollection.findCartByUserId(userId);
+    console.log("will add");
+    const freet = await ShoppingCartCollection.removeFromCart(req.body.cartIdRemoveFrom, req.params.itemForSaleId);
+    res.status(200).json({
+      message: 'Your freet was updated successfully.',
+      cart: util.constructShoppingCartResponse(freet)
     });
   }
+
 );
 
 export {router as shoppingCartRouter};

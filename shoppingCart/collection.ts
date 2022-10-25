@@ -13,6 +13,14 @@ import ItemForSaleCollection from '../ItemForSale/collection';
  * and contains all the information in Freet. https://mongoosejs.com/docs/typescript.html
  */
 class ShoppingCartCollection {
+
+
+  static async findAll(): Promise<Array<HydratedDocument<ShoppingCart>>> {
+    // Retrieves freets and sorts them from most to least recent
+    return ShoppingCartModel.find({}).populate('cartOwner');
+  }
+
+
   /**
    * Add a freet to the collection
    *
@@ -30,7 +38,7 @@ class ShoppingCartCollection {
 
     });
     await shoppingCart.save(); // Saves freet to MongoDB
-    return shoppingCart.populate('authorId');
+    return shoppingCart.populate('cartOwner');
   }
 
   /**
@@ -40,7 +48,7 @@ class ShoppingCartCollection {
    * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
    */
   static async findOne(shoppingCartId: Types.ObjectId | string): Promise<HydratedDocument<ShoppingCart>> {
-    return ShoppingCartModel.findOne({_id: shoppingCartId}).populate('authorId');
+    return ShoppingCartModel.findOne({_id: shoppingCartId}).populate('cartOwner');
   }
 
 //   /**
@@ -61,7 +69,12 @@ class ShoppingCartCollection {
    */
   static async findCartByUsername(username: string): Promise<Array<HydratedDocument<ShoppingCart>>> {
     const user = await UserCollection.findOneByUsername(username);
-    return ShoppingCartModel.find({userId: user._id});//.populate('userId');
+    return ShoppingCartModel.find({cartOwner: user._id}).populate('cartOwner');
+  }
+
+  static async findCartByUserId(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<ShoppingCart>>> {
+    const user = await UserCollection.findOneByUserId(userId);
+    return ShoppingCartModel.find({cartOwner: user._id}).populate('cartOwner');
   }
 
   /**
@@ -79,10 +92,12 @@ class ShoppingCartCollection {
     shoppingCart.items.set(itemForSaleId, shoppingCart.items.get(itemForSaleId) + 1);
     shoppingCart.numberOfItems += 1;
     const itemPrice = await ItemForSaleCollection.getPrice(itemForSaleId);
+    console.log(itemPrice)
+    console.log(parseFloat(itemPrice));
     shoppingCart.total += parseFloat(itemPrice);
 
     await shoppingCart.save();
-    return shoppingCart.populate('authorId');
+    return shoppingCart.populate('cartOwner');
   }
 
 
@@ -111,7 +126,7 @@ class ShoppingCartCollection {
     //shoppingCart.total -= await ItemForSaleCollection.getPrice({_id: itemForSaleId});
 
     await shoppingCart.save();
-    return shoppingCart.populate('authorId');
+    return shoppingCart.populate('cartOwner');
   }
 
 
@@ -130,7 +145,7 @@ class ShoppingCartCollection {
     shoppingCart.total = 0;
 
     await shoppingCart.save();
-    return shoppingCart.populate('authorId');
+    return shoppingCart.populate('cartOwner');
   }
 
 

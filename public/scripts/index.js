@@ -58,15 +58,16 @@ const formsAndHandlers = {
   'edit-comment': editComment,
   'delete-comment': deleteComment,
   'create-shoppingCart': createShoppingCart,
+  'view-all-shoppingCarts': viewAllCarts,
   'add-to-cart': addToCart,
-  'delete-shoppingCart': deleteCart
+  'delete-shoppingCart': deleteCart,
+  'delete-from-cart': deleteFromCart
 
 };
 
 // Attach handlers to forms
 function init() {
   Object.entries(formsAndHandlers).forEach(([formID, handler]) => {
-    console.log(formID);
     const form = document.getElementById(formID);
     form.onsubmit = e => {
       e.preventDefault();
