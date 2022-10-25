@@ -2,7 +2,7 @@ import {HydratedDocument, Types} from 'mongoose';
 import type {ShoppingCart} from './model';
 import ShoppingCartModel from './model';
 import UserCollection from '../user/collection';
-import ItemForSaleCollection from 'ItemForSale/collection';
+import ItemForSaleCollection from '../ItemForSale/collection';
 
 /**
  * This files contains a class that has the functionality to explore freets
