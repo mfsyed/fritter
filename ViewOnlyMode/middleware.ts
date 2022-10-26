@@ -52,7 +52,7 @@ import ViewOnlyModeCollection from '../ViewOnlyMode/collection';
     if (viewonlymode) {
       res.status(404).json({
         error: {
-          modeNotFound: `this mode exists!`
+          modeNotFound: `this mode exists! use that object`
         }
       });
       return;

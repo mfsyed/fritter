@@ -315,9 +315,18 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 
 
-## API Routes for Milestone
 
-#### `POST /api/react/reaction?=` - React to a Freet
+
+
+
+
+
+
+
+
+## Complete List of API Routes for A5
+
+#### `POST /api/react/:reaction?` - React to a Freet
 
 
 **Returns**
@@ -327,6 +336,44 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+- `400` if reaction isn't in {Like, Wow, Angry, Sad, Laugh}
+
+
+
+#### `PUT /api/react/:reaction?` - Change a Reaction
+
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if reaction isn't in {Like, Wow, Angry, Sad, Laugh}
+
+- `400` if there is now previous reaction that was recorded for this specific freet/user(reactor) pair.
+
+
+#### `DELETE /api/react/:reaction?` - Delete a Reaction
+
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if reaction isn't in {Like, Wow, Angry, Sad, Laugh}
+
+- `400` if there is now previous reaction that was recorded for this specific freet/user(reactor) pair.
+
+
+
 
 
 
@@ -348,7 +395,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 
 
-#### `POST /api/viewonly/:vieweeID` - Switch viewonlymodestate state
+#### `POST /api/viewonly/:vieweeID` - Create a viewOnlyObject for a viewer and viewee acounts
 
 
 **Returns**
@@ -359,6 +406,27 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+- `404` if there is already an object with the same viewer, viewee pair
+
+
+#### `PUT /api/viewonly/:viewModeOnlyId` - Change the viewOnlyModeStatus
+
+
+**Returns**
+
+- A success message
+
+- A viewModeOnlyObject
+
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `404` if there is no preexisting object with the same viewer, viewee pair
+
+- `403` if the user is not registered as the viewer in the object.
 
 
 
@@ -374,7 +442,6 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `link` _{string}_ - The website link to the item
 
-- `name` _{string}_ - name of the item
 
 **Returns**
 
@@ -389,6 +456,108 @@ This renders the `index.html` file that will be used to interact with the backen
 
 
 
+#### `PUT /api/ItemsForSale:/itemForSaleId` - Change description
+
+**Body**
+
+- `description` _{string}_ - The content of the item
+
+
+**Returns**
+
+- A success message
+
+- A object with the modified ItemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if the itemForSaleId does not exist
+
+- `403` if the user is not the seller/creator of this object
+
+- `413` If the description is more than 140 characters or empty
+
+
+
+#### `PUT /api/ItemsForSale:/itemForSaleId` - Change description
+
+**Body**
+
+- `description` _{string}_ - The content of the item
+
+
+**Returns**
+
+- A success message
+
+- A object with the modified ItemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if the itemForSaleId does not exist
+
+- `403` if the user is not the seller/creator of this object
+
+- `413` If the description is more than 140 characters or empty
+
+
+
+
+#### `PUT /api/ItemsForSale:/itemForSaleId` - Change price
+
+**Body**
+
+- `price` _{string}_ - The price of the item
+
+
+
+**Returns**
+
+- A success message
+
+- A object with the modified ItemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if the itemForSaleId does not exist
+
+- `403` if the user is not the seller/creator of this object
+
+- `413` If the price doesn't match this regex: ^[-+]?[0-9]+[.]?[0-9][0-9]$
+
+
+
+#### `PUT /api/ItemsForSale:/itemForSaleId` - Change link
+
+**Body**
+
+- `link` _{string}_ - The website link to the item
+
+**Returns**
+
+- A success message
+
+- A object with the modified ItemForSale
+
+**Throws**
+
+- `403` if the user is not logged in
+
+- `400` if the itemForSaleId does not exist
+
+- `403` if the user is not the seller/creator of this object
+
+- `413` If the price doesn't match this regex: ^[-+]?[0-9]+[.]?[0-9][0-9]$
+
+
+
+
 #### `DELETE /api/itemsForSale/:itemForSaleId?` - Delete an existing ItemforSale
 
 **Returns**
@@ -399,40 +568,25 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 - `403` if the user is not the author of the freet
-- `404` if the itemForSaleId is invalid
+- `404` if the itemForSaleId is invalid/doesn't exist
 
-#### `PUT /api/itemsForSale/:itemForSaleId?` - Update an existing itemForSale
 
-**Body**
 
-- `description` _{string}_ - The content of the item
-
-- `price` _{string}_ - The price of the item
-
-- `link` _{string}_ - The website link to the item
-
-- `name` _{string}_ - name of the item
+#### `GET /api/itemsForSale` - Get all the freets
 
 **Returns**
 
-- A success message
-- An object with the updated itemForSale
-
-**Throws**
-
-- `403` if the user is not logged in
-- `404` if the itemForSaleId is invalid
-- `403` if the user is not the author of the itemForSale
-- `400` if the new itemForSale content is empty or a stream of empty spaces
-- `413` if the new itemForSale description is more than 140 characters long
+- An array of all itemsForSale sorted in descending order by date modified
 
 
 
-#### `POST /api/shoppingCart/:itemForSaleId?` - Add an ItemForSale to ShoppingCart
+
+
+#### `PUT /api/shoppingCart/:itemForSaleId?` - Add an ItemForSale to ShoppingCart
 
 **Body**
 
-- `itemForSaleId` _{string}_ - itemForSale
+- `shoppingCartId` _{string}_ - shoppingCartId
 
 
 **Returns**
@@ -444,10 +598,156 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if itemForSaleId is invalid
 
+- `404` if shoppingCart doesn't exist
+
+- `413` if user is not cartOwner of shoppingCart
 
 
-#### `GET /api/shoppingCart` - Get shopping cart items
+
+#### `GET /api/itemsForSale?seller=seller` - Get itemsForSale By Seller
 
 **Returns**
 
-- An array of itemForSale items in shopping cart
+- An array of itemsForSale created by user with username `seller`
+
+**Throws**
+
+- `400` if `seller` is not given
+- `404` if `seller` is not a recognized username of any user
+
+
+
+
+#### `POST /api/shoppingCarts` - Create Shopping Cart
+
+**Returns**
+
+- A shopping cart Object
+
+
+
+#### `GET /api/shoppingCarts` - Get all created shopping carts
+
+**Returns**
+
+- An array of shoppingCart objects
+
+
+#### `PUT /api/shoppingCart/:itemForSaleId?` - Remove ItemForSale from ShoppingCart
+
+**Body**
+
+- `shoppingCartId` _{string}_ - shoppingCart
+
+
+**Returns**
+
+- A success message
+- Populated shopping cart
+
+**Throws**
+
+- `403` if itemForSaleId is invalid
+
+- `403` if shoppingCart is invalid
+
+- `404` if itemForSaleId is not in cart
+
+- `413` if user is not cartOwner of shoppingCart
+
+
+
+#### `PUT /api/shoppingCart/:itemForSaleId?` - Add ItemForSale to ShoppingCart
+
+**Body**
+
+- `shoppingCartId` _{string}_ - shoppingCart
+
+
+**Returns**
+
+- A success message
+- Populated shopping cart
+
+**Throws**
+
+- `403` if itemForSaleId is invalid
+
+- `403` if shoppingCart is invalid
+
+- `404` if itemForSaleId is not in cart
+
+- `413` if user is not cartOwner of shoppingCart
+
+
+
+
+
+
+#### `DELETE /api/shoppingCart/:shoppingCartId?` - delete shopping cart
+
+
+**Returns**
+
+- A success message
+- Populated shopping cart
+
+**Throws**
+
+
+- `403` if shoppingCart is invalid/ doesn't exist
+
+- `413` if user is not cartOwner of shoppingCart
+
+
+
+
+#### `POST /api/comment/:originalFreetId?` - Create a new comment
+
+**Body**
+
+- `content` _{string}_ - The content of the freet
+
+**Returns**
+
+- A success message
+- A object with the created comment
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the freet content is empty or a stream of empty spaces
+- `413` If the freet content is more than 140 characters long
+- `404` if originalFreetId is invalid/does not exist.
+
+#### `DELETE /api/comment/:commentId?` - Delete an existing comment
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the author of the comment
+- `404` if the commentId is invalid
+
+#### `PUT /api/comment/:commentId?` - Update an existing comment
+
+**Body**
+
+- `content` _{string}_ - The new content of the freet
+
+**Returns**
+
+- A success message
+- An object with the updated comment
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the commentId is invalid
+- `403` if the user is not the author of the comment
+- `400` if the new comment content is empty or a stream of empty spaces
+- `413` if the new comment content is more than 140 characters long
+
