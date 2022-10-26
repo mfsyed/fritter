@@ -324,7 +324,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 
 
-## Complete List of API Routes for A5
+## Additional List of API Routes for A5 including the ones above
 
 #### `POST /api/react/:reaction?` - React to a Freet
 
